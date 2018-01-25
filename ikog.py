@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Run the script for details of the licence
@@ -92,7 +92,7 @@ try:
     ruler   = "~".ljust(gMaxLen - 1, "~")
     divider = "_".ljust(gMaxLen - 1, "_")
 except Exception:
-    print "Error found.  Probably wrong version of Python"
+    print("Error found.  Probably wrong version of Python")
 
 gReqPythonMajor = 2
 gReqPythonMinor = 4
@@ -102,7 +102,7 @@ def safeRawInput(prompt):
     try:
         entry = raw_input(prompt)
     except:
-        print "\n"
+        print("\n")
         entry = ""
     return entry
 
@@ -111,7 +111,7 @@ def compareTodo(a, b):
     return cmp(a.getEffectivePriority(), b.getEffectivePriority())
 
 def printError(msg):
-    print gColor.code("error") + "ERROR: " + msg + gColor.code("normal")
+    print(gColor.code("error") + "ERROR: " + msg + gColor.code("normal"))
 
 
 def clearScreen(useSys = False):
@@ -120,9 +120,9 @@ def clearScreen(useSys = False):
             os.system("clear")
         elif os.name in ("dos", "ce", "nt"):
             os.system("cls")
-    print "\n"*25
+    print("\n"*25)
     for l in banner:
-        print l
+        print(l)
 
 ### XTEA algorithm public domain
 class Xtea:
@@ -141,7 +141,7 @@ class Xtea:
     def xtea_encrypt(self, key,block,n=32):
         v0,v1 = struct.unpack("!2L",block)
         k = struct.unpack("!4L",key)
-        sum,delta,mask = 0L,0x9e3779b9L,0xffffffffL
+        sum,delta,mask = "0L","0x9e3779b9L","0xffffffffL"
         for round in range(n):
             v0 = (v0 + (((v1<<4 ^ v1>>5) + v1) ^ (sum + k[sum & 3]))) & mask
             sum = (sum + delta) & mask
@@ -263,7 +263,7 @@ class ColorCoder:
 
     def printCode(self, type):
         if self.codeSet != self.NONE:
-            print self.code(type),
+            print(self.code(type)),
 
     def getCodeSet(self):
         return self.codeSet
@@ -278,12 +278,12 @@ class ListViewer:
         for line in list:
             if count >= self.maxlines or line == pause:
                 io = safeRawInput("--- Press enter for more. Enter s to skip ---").strip()
-                print ""
+                print("")
                 if len(io) > 0 and io.upper()[0] == "S":
                     break
                 count = 0
             if line != pause:
-                print line
+                print(line)
             count = count + 1
 
 ### Handler for encryption
@@ -316,7 +316,7 @@ class Encryptor:
             if prompt2 != "":
                 input2 = getpass.getpass(prompt2 + " >>>")
                 if input1 != input2:
-                    print "You must enter the same password.  Start again"
+                    print("You must enter the same password.  Start again")
                 else:
                     done = True
             else:
@@ -459,7 +459,7 @@ class EditorLauncher:
     def scrubFile(self, fname):
         try:
             os.remove(fname)
-        except Exception, e:
+        except Exception as e:
             printError("Failed to remove file " + fname + ". If you entered any private data you should delete this file yourself.")
 
     def readFile(self, fname):
@@ -479,7 +479,7 @@ class EditorLauncher:
                 line = fh.readline()
             fh.close()
             success = True
-        except Exception, e:
+        except Exception as e:
             printError("Error reading the edited text. " + str(e))
         return (success, text)
 
@@ -516,7 +516,7 @@ class EditorLauncher:
                 success = True
             except os.error:
                 pass
-            except Exception, e:
+            except Exception as e:
                 printError(str(e))
         elif os.name == "nt":
             if file.find(" ") >= 0:
@@ -534,7 +534,7 @@ class EditorLauncher:
                         break
                 except os.error:
                     pass
-                except Exception, e:
+                except Exception as e:
                     printError(str(e))
         return success
 
@@ -599,7 +599,7 @@ class ListFileCommand(BaseCommand):
             list_args = splitted_line[1]
 
         old_out = sys.stdout
-        print ruler
+        print(ruler)
         sys.stdout = open(output_file, 'w')
         todo.setFilterArray(True, list_args)
         #todo.showLocalFilter()
@@ -607,8 +607,8 @@ class ListFileCommand(BaseCommand):
         todo.clearFilterArray(True)
         truncateTask = True
         sys.stdout = old_out
-        print "Output sent to %s" % output_file
-        print ruler
+        print("Output sent to %s" % output_file)
+        print(ruler)
 
 class HelpCommand(BaseCommand):
     def __init__(self):
@@ -620,13 +620,13 @@ class HelpCommand(BaseCommand):
             todo.printHelp(todo.help)
             return
         if len(line.strip().split()) > 1 or line.strip() not in todo.commands:
-            print "Can't understand. You should give a command name, or nothing to receive a complete help"
+            print("Can't understand. You should give a command name, or nothing to receive a complete help")
         else:
             cmd = todo.commands[line.strip()]
-            print cmd.shortdesc
+            print(cmd.shortdesc)
             if cmd.helpdesc:
-                print '--'
-                print cmd.helpdesc
+                print('--')
+                print(cmd.helpdesc)
 
 class ModCommand(BaseCommand):
     def __init__(self):
@@ -651,12 +651,12 @@ class ListCommand(BaseCommand):
                    ": Precede term with - to exclude e.g.  -@Computer\n",
                 ['L'])
     def run(self, todo, line):
-        print ruler
+        print(ruler)
         todo.setFilterArray(True, line)
         todo.showLocalFilter()
         todo.printList(False, "", "")
         todo.clearFilterArray(True)
-        print ruler
+        print(ruler)
         truncateTask = True
 
 class EdCommand(BaseCommand):
@@ -1037,12 +1037,12 @@ class TodoList:
             if not globalPAbbr.removeAbbreviation(elements[0]):
                 self.showError("Could not find project abbreviation " + line)
             else:
-                print "Project abbreviation ", line, " removed."
+                print("Project abbreviation ", line, " removed.")
                 save = True
         return save
 
     def showPAbbreviations(self):
-        print globalPAbbr.toStringVerbose()
+        print(globalPAbbr.toStringVerbose())
 
     def setAbbreviation(self, line):
         save = False
@@ -1060,12 +1060,12 @@ class TodoList:
             if not globalAbbr.removeAbbreviation(elements[0]):
                 self.showError("Could not find abbreviation " + line)
             else:
-                print "Abbreviation ", line, " removed."
+                print("Abbreviation ", line, " removed.")
                 save = True
         return save
 
     def showAbbreviations(self):
-        print globalAbbr.toStringVerbose()
+        print(globalAbbr.toStringVerbose())
 
     def setShortcut(self, line, force = False):
         elements = line.split(" ", 1)
@@ -1075,7 +1075,7 @@ class TodoList:
                 command = elements[1]
             else:
                 command = ""
-        except Exception, e:
+        except Exception as e:
             self.showError("Did not understand the command.  Format should be SHORTCUT N my command.")
             return False
 
@@ -1097,7 +1097,7 @@ class TodoList:
                 msg = "unused"
             else:
                 msg = s
-            print "=%1d %s" %(index, msg)
+            print("=%1d %s" %(index, msg))
             index = index + 1
 
     def setShortcuts(self, settings = []):
@@ -1185,7 +1185,7 @@ class TodoList:
             name = name + ".dat"
         try:
             name = os.path.expanduser(name)
-        except Exception, e:
+        except Exception as e:
             self.showError("Failed to expand path. " + str(e))
         return name
 
@@ -1194,10 +1194,10 @@ class TodoList:
 
         try:
             self.splitFile(filename, False)
-            print "Using external data file ", filename
+            print("Using external data file ", filename)
             success = True
         except IOError:
-            print "No external data file ", filename, ", so using internal tasks."
+            print("No external data file ", filename, ", so using internal tasks.")
         return success
 
     def setSysCalls(self, mode):
@@ -1205,10 +1205,10 @@ class TodoList:
         mode = mode.strip().upper()
         if mode == "ON":
             self.sysCalls = True
-            print "Using system calls for clear screen"
+            print("Using system calls for clear screen")
         elif mode == "OFF":
             self.sysCalls = False
-            print "No system calls for clear screen"
+            print("No system calls for clear screen")
         else:
             self.showError("Could not understand the sys command.  Use SYS ON or OFF.")
         return (self.sysCalls != oldCalls)
@@ -1224,9 +1224,9 @@ class TodoList:
             if save:
                 self.save("")
         if self.autoSave:
-            print "Autosave is on."
+            print("Autosave is on.")
         else:
-            print "Autosave is off."
+            print("Autosave is off.")
 
 
     def showError(self, msg):
@@ -1234,17 +1234,17 @@ class TodoList:
 
     def pause(self, prompt = "Press enter to continue."):
         if safeRawInput(prompt).strip() != "":
-            print "Entry ignored!"
+            print("Entry ignored!")
 
     def setReview(self, mode):
         oldReview = self.review
         mode = mode.strip().upper()
         if mode == "ON":
             self.review = True
-            print "In review mode.  Enter advances to the next task"
+            print("In review mode.  Enter advances to the next task")
         elif mode == "OFF":
             self.review = False
-            print "Review mode off.  Enter re-displays the current task"
+            print("Review mode off.  Enter re-displays the current task")
         else:
             self.showError("Could not understand the review command.  Use REVIEW ON or OFF.")
         return (self.review != oldReview)
@@ -1255,7 +1255,7 @@ class TodoList:
 
     def run(self, commandList):
         if not supportAes:
-            print "AES encryption not available."
+            print("AES encryption not available.")
         print("\nEnter HELP for instructions.")
 
         if supportReadline:
@@ -1296,12 +1296,12 @@ class TodoList:
             self.checkCurrentTask()
             if printCurrent:
                 self.moveToVisible()
-                print ruler
+                print(ruler)
                 if truncateTask:
                     self.printItemTruncated(self.currentTask, "Current: ")
                 else:
                     self.printItemVerbose(self.currentTask)
-                print ruler
+                print(ruler)
             printCurrent= True
             truncateTask = False
             if self.dirty:
@@ -1311,7 +1311,7 @@ class TodoList:
             if len(commandList) >= 1:
                 enteredLine = commandList[0]
                 commandList = commandList[1:]
-                print enteredLine
+                print(enteredLine)
             (rawcommand, line) = InputParser(prompt).read(enteredLine)
             enteredLine = ""
             command = rawcommand.upper()
@@ -1323,7 +1323,7 @@ class TodoList:
                     rawcommand = ""
                     line = ""
                     continue
-                print "Shortcut: ", rawcommand, " ", line
+                print("Shortcut: ", rawcommand, " ", line)
             command = rawcommand.upper()
             if command in self.commands:
                 self.commands[command].run(self, line)
@@ -1366,12 +1366,12 @@ class TodoList:
                 self.pause("Press enter to clear screen and continue. ")
                 clearScreen(self.sysCalls)
             elif command == "VERSION" or command == "VER":
-                print notice[0]
+                print(notice[0])
             elif command == "SAVE" or command == "S":
                 if not self.dirty:
-                    print "There's no need to save now.  If the prompt shows >>> "
-                    print "then there is nothing to save.  You only need to save if the prompt "
-                    print "shows !>>"
+                    print("There's no need to save now.  If the prompt shows >>> ")
+                    print("then there is nothing to save.  You only need to save if the prompt ")
+                    print("shows !>>")
                 else:
                     self.forceSave("")
             elif command == "NEW":
@@ -1420,7 +1420,7 @@ class TodoList:
             elif command == "WEB":
                 try:
                     webbrowser.open("http://www.henspace.co.uk")
-                except Exception, e:
+                except Exception as e:
                     self.showError("Unable to launch browser. " + str(e))
             elif command == "COLOR" or command == "COLOUR" or command == "C":
                 try:
@@ -1460,9 +1460,9 @@ class TodoList:
                 if newItem.hasHiddenTask():
                     clearScreen(self.sysCalls)
                 if newItem.hasError():
-                    print "Errors were found:"
-                    print newItem.getError()
-                    print "The task was not added."
+                    print("Errors were found:")
+                    print(newItem.getError())
+                    print("The task was not added.")
                     printCurrent = False
                 else:
                     self.todo.insert(0, newItem)
@@ -1546,7 +1546,7 @@ class TodoList:
     def timeout(self):
         self.timerActive = False
         clearScreen()
-        print "\n\x07Timer\x07 complete.\x07\n\x07Press enter to continue.\x07"
+        print("\n\x07Timer\x07 complete.\x07\n\x07Press enter to continue.\x07")
 
     def runTimer(self, delay):
         self.timerActive = True
@@ -1555,10 +1555,10 @@ class TodoList:
         s = raw_input(str(delay) + " minute timer running.\nAny entry will cancel the timer:\n>>>")
         if self.timerActive:
             t.cancel()
-            print "Timer cancelled."
+            print("Timer cancelled.")
         elif s != "":
             s = ""
-            print "Input discarded as timer has finished."
+            print("Input discarded as timer has finished.")
         return s.strip()
 
     def addTaskExternal(self):
@@ -1572,9 +1572,9 @@ class TodoList:
     def addTask(self, line):
         newItem = self.createItem(line)
         if newItem.hasError():
-            print "Errors were found:"
-            print newItem.getError()
-            print "The task was not added."
+            print("Errors were found:")
+            print(newItem.getError())
+            print("The task was not added.")
             printCurrent = False
         else:
             if newItem.hasHiddenTask():
@@ -1603,9 +1603,9 @@ class TodoList:
             f.write(item.toString())
             f.write("\n")
             f.close()
-            print "Tasks archived to " + filename
+            print("Tasks archived to " + filename)
             success = True
-        except Exception, e:
+        except Exception as e:
             self.showError("Error trying to archive the tasks.\n" + str(e))
         return success
 
@@ -1619,8 +1619,8 @@ class TodoList:
                 f.write(item.toString())
                 f.write("\n")
             f.close()
-            print "Tasks exported to " + filename
-        except Exception, e:
+            print("Tasks exported to " + filename)
+        except Exception as e:
             self.showError("Error trying to export the file.\n" + str(e))
 
     def importTasks(self, filename):
@@ -1636,7 +1636,7 @@ class TodoList:
                 self.showError("Failed to find any tasks to import.")
             else:
                 success = True
-        except Exception, e:
+        except Exception as e:
             self.showError("Error importing tasks. " + str(e))
         return success
 
@@ -1651,7 +1651,7 @@ class TodoList:
                 f.write("#" + ruler + "\n")
                 f.close()
                 success = True
-            except Exception, e:
+            except Exception as e:
                 self.showError("Error trying to create the file " + filename + ". " + str(e))
         return success
 
@@ -1660,7 +1660,7 @@ class TodoList:
             self.forceSave(filename)
         else:
             self.dirty = True
-            print "Autosave is off, so changes not saved yet."
+            print("Autosave is off, so changes not saved yet.")
 
     def forceSave(self, filename):
         if filename == "":
@@ -1698,7 +1698,7 @@ class TodoList:
             f.close()
             success = True
 
-        except Exception, e:
+        except Exception as e:
             self.showError("Error trying to save the file.\n" + str(e))
         if success:
             try:
@@ -1712,8 +1712,8 @@ class TodoList:
                 os.chmod(filename, stat.S_IMODE(oldstat.st_mode)) # ensure permissions carried over
                 self.filename = filename
                 self.dirty = False
-                print "Tasks saved."
-            except Exception, e:
+                print("Tasks saved.")
+            except Exception as e:
                 self.showError("Error trying to rename the backups.\n" + str(e))
 
     def moveTo(self, indexStr):
@@ -1723,7 +1723,7 @@ class TodoList:
                 self.showError("Sorry but there is no task " + indexStr)
             else:
                 if not self.isViewable(self.todo[index]):
-                    print "Switching off your filter so that the task can be displayed."
+                    print("Switching off your filter so that the task can be displayed.")
                     self.clearFilterArray(False)
                 self.currentTask = index
         except ValueError:
@@ -1738,7 +1738,7 @@ class TodoList:
         while not self.isViewable(self.todo[self.currentTask]):
             self.incTaskLoop()
             if self.currentTask == start:
-                print "Nothing matched your filter.  Removing your filter so that the current task can be displayed."
+                print("Nothing matched your filter.  Removing your filter so that the current task can be displayed.")
                 self.clearFilterArray(False)
                 break
 
@@ -1748,14 +1748,14 @@ class TodoList:
             self.showError("Sorry but there is no task " + indexStr + " to show.")
         elif self.todo[index].hasHiddenTask():
             ec = Encryptor()
-            print WordWrapper(gMaxLen).wrap(ec.enterKeyAndDecrypt(self.todo[index].getHiddenTask()))
+            print(WordWrapper(gMaxLen).wrap(ec.enterKeyAndDecrypt(self.todo[index].getHiddenTask())))
         else:
-            print "Task ", index, " has no encrypted data."
+            print("Task ", index, " has no encrypted data.")
 
     def moveTask(self, indexStr, where):
         success = False
         if indexStr == "":
-            print "You must supply the number of the task to move."
+            print("You must supply the number of the task to move.")
             return False
         try:
             index = self.getRequiredTask(indexStr)
@@ -1766,7 +1766,7 @@ class TodoList:
                     item = self.todo[index]
                     self.todo[index] = self.todo[index + 1]
                     self.todo[index + 1] = item
-                    print "Task ", index, " moved down."
+                    print("Task ", index, " moved down.")
                     success = True
                 else:
                     self.showError("Task " + str(index) + " is already at the bottom.")
@@ -1779,7 +1779,7 @@ class TodoList:
                         item = self.todo[dest]
                         self.todo[dest] = self.todo[index]
                         self.todo[index] = item
-                    print "Task ", index, " moved up."
+                    print("Task ", index, " moved up.")
                     success = True
                 else:
                     self.showError("Task " + str(index) + " is already at the top.")
@@ -1825,7 +1825,7 @@ class TodoList:
             if indexStr == "^" or indexStr.upper() == "THIS":
                 doit = True
             else:
-                print "Are you sure you want to archive: ' " + self.todo[index].toStringSimple(True) + "'"
+                print("Are you sure you want to archive: ' " + self.todo[index].toStringSimple(True) + "'")
                 if safeRawInput("Enter Yes to archive this task? >>>").upper() == "YES":
                     doit = True
             if doit:
@@ -1835,12 +1835,12 @@ class TodoList:
                 self.todo[index].copy(newItem, TodoItem.APPEND)
                 if self.writeArchive(self.todo[index]):
                     self.todo[index:index + 1] = []
-                    print "Task ", index, " has been archived."
+                    print("Task ", index, " has been archived.")
                 else:
                     doit = False
-                    print "Task ", index, " marked as archived but not removed."
+                    print("Task ", index, " marked as archived but not removed.")
             else:
-                print "Task ", index, " has not been archived."
+                print("Task ", index, " has not been archived.")
         return doit
 
     def removeTask(self, indexStr):
@@ -1852,14 +1852,14 @@ class TodoList:
             if indexStr == "^" or indexStr.upper() == "THIS":
                 doit = True
             else:
-                print "Are you sure you want to remove ' " + self.todo[index].toStringSimple(True) + "'"
+                print("Are you sure you want to remove ' " + self.todo[index].toStringSimple(True) + "'")
                 if safeRawInput("Enter Yes to delete this task? >>>").upper() == "YES":
                     doit = True
             if doit:
                 self.todo[index:index + 1] = []
-                print "Task ", index, " has been removed."
+                print("Task ", index, " has been removed.")
             else:
-                print "Task ", index, " has not been removed."
+                print("Task ", index, " has not been removed.")
         return doit
 
     def substituteText(self, indexStr):
@@ -1874,7 +1874,7 @@ class TodoList:
 
         success = False
         if indexStr == "":
-            print "You must supply the number of the task to change."
+            print("You must supply the number of the task to change.")
             return False
 
         index = self.getRequiredTask(indexStr)
@@ -1895,16 +1895,16 @@ class TodoList:
                 return False
             newItem = self.createItem(newText)
             if newItem.hasError():
-                print "With the substitution the task had errors:"
-                print newItem.getError()
-                print "Task ", index, " is unchanged."
+                print("With the substitution the task had errors:")
+                print(newItem.getError())
+                print("Task ", index, " is unchanged.")
             else:
                 if newItem.hasHiddenTask():
                     clearScreen(self.sysCalls)
                     self.showError("It isn't possible to create private or secret data by using the substitition command.")
                 else:
                     self.todo[index].copy(newItem, TodoItem.MODIFY)
-                    print "Task ", index, " has been changed."
+                    print("Task ", index, " has been changed.")
                     success = True
         return success
 
@@ -1919,7 +1919,7 @@ class TodoList:
 
         success = False
         if indexStr == "":
-            print "You must supply the number of the task to change."
+            print("You must supply the number of the task to change.")
             return
 
         index = self.getRequiredTask(indexStr)
@@ -1934,13 +1934,13 @@ class TodoList:
                     entry = exEdit.edit(entry)
                 else:
                     if replace == TodoItem.REPLACE:
-                        print "This task will completely replace the existing entry,"
-                        print "including any projects and actions."
+                        print("This task will completely replace the existing entry,")
+                        print("including any projects and actions.")
                     elif replace == TodoItem.MODIFY:
-                        print "Only the elements you add will be replaced.  So, for example,"
-                        print "if you don't enter any projects the original projects will remain."
+                        print("Only the elements you add will be replaced.  So, for example,")
+                        print("if you don't enter any projects the original projects will remain.")
                     else:
-                        print "Elements you enter will be appended to the current task"
+                        print("Elements you enter will be appended to the current task")
                     entry = safeRawInput("Enter new details >>>")
             if entry != "":
                 if replace == TodoItem.APPEND:
@@ -1952,17 +1952,17 @@ class TodoList:
                     if newItem.hasHiddenTask():
                         clearScreen(self.sysCalls)
                 if newItem.hasError():
-                    print "The task had errors:"
-                    print newItem.getError()
-                    print "Task ", index, " is unchanged."
+                    print("The task had errors:")
+                    print(newItem.getError())
+                    print("Task ", index, " is unchanged.")
                 else:
                     if newItem.hasHiddenTask() and replace == TodoItem.APPEND:
                         self.showError("It isn't possible to extend the encrypted part of a task.\nThis part is ignored.")
                     self.todo[index].copy(newItem, replace)
-                    print "Task ", index, " has been changed."
+                    print("Task ", index, " has been changed.")
                     success = True
             else:
-                print "Task ", index, " has not been touched."
+                print("Task ", index, " has not been touched.")
         return success
 
     def incTask(self):
@@ -1986,15 +1986,15 @@ class TodoList:
 
     def printItemTruncated(self, index, leader):
         if len(self.todo) < 1:
-            print leader, "no tasks"
+            print(leader, "no tasks")
         else:
-            scrnline = leader + "[%02d] %s" % (index, self.todo[index].toStringSimple())
+            scrnline = (leader + "[%02d] %s" % (index, self.todo[index].toStringSimple()))
             if usePlugin:
-                print ikogPlugin.modifyShortOutput(scrnline)
+                print(ikogPlugin.modifyShortOutput(scrnline))
             elif len(scrnline) > gMaxLen:
-                print scrnline[0:gMaxLen - 3] + "..."
+                print(scrnline[0:gMaxLen - 3] + "...")
             else:
-                print scrnline
+                print(scrnline)
 
 
     def printItem(self, index, colorType):
@@ -2015,15 +2015,15 @@ class TodoList:
 
     def printItemVerbose(self, index):
         if len(self.todo) < 1:
-            print "There are no tasks to be done."
+            print("There are no tasks to be done.")
         else:
             self.showFilter()
             wrapper = WordWrapper(gMaxLen)
             scrnline = wrapper.wrap("[%02d] %s" % (index, self.todo[index].toStringVerbose()))
             if usePlugin:
-                print ikogPlugin.modifyVerboseOutput(scrnline)
+                print(ikogPlugin.modifyVerboseOutput(scrnline))
             else:
-                print scrnline
+                print(scrnline)
 
     def clearFilterArray(self, local):
         if local:
@@ -2141,7 +2141,7 @@ class TodoList:
             index.addCollection(item.getActions())
         index.sort()
         (n, value) = index.getFirstItem()
-        print ruler
+        print(ruler)
         self.showFilter()
         while n >= 0:
             if not gColor.usingColor() and n > 0:
@@ -2152,7 +2152,7 @@ class TodoList:
             self.printList(div, "<H2 class=\"hAction\">" + value + "</H2>\n", gColor.code("title") + "\n" + value + "\n" + gColor.code("title"))
             self.clearFilterArray(True)
             (n, value) = index.getNextItem(n)
-        print ruler
+        print(ruler)
 
     def listByProject(self):
         index = SearchIndex()
@@ -2160,7 +2160,7 @@ class TodoList:
             index.addCollection(item.getProjects())
         index.sort()
         (n, value) = index.getFirstItem()
-        print ruler
+        print(ruler)
         self.showFilter()
         while n >= 0:
             if not gColor.usingColor() and n > 0:
@@ -2171,7 +2171,7 @@ class TodoList:
             self.printList(div, "<H2 class =\"hProject\">Project: " + value + "</H2>\n", gColor.code("title") + "\nProject: " + value + "\n" + gColor.code("normal"))
             self.clearFilterArray(True)
             (n, value) = index.getNextItem(n)
-        print ruler
+        print(ruler)
 
     def listByDate(self):
         index = SearchIndex()
@@ -2179,7 +2179,7 @@ class TodoList:
             index.add(item.getDate())
         index.sort()
         (n, value) = index.getFirstItem()
-        print ruler
+        print(ruler)
         self.showFilter()
         while n >= 0:
             if not gColor.usingColor() and n > 0:
@@ -2190,7 +2190,7 @@ class TodoList:
             self.printList(div, "<H2 class =\"hDate\">Date: " + value + "</H2>\n", gColor.code("title") + "\nDate: " + value + "\n" + gColor.code("normal"))
             self.clearFilterArray(True)
             (n, value) = index.getNextItem(n)
-        print ruler
+        print(ruler)
 
 
     def showFilter(self):
@@ -2227,10 +2227,10 @@ class TodoList:
             if self.isViewable(item):
                 if first:
                     if div:
-                        print divider
+                        print(divider)
                     self.output(outHtml, outStd)
                 if not gColor.usingColor() and not first:
-                    print divider
+                    print(divider)
                     count = count + 1
                 count = count + self.printItem(n, color)
                 first = False
@@ -2313,14 +2313,14 @@ class TodoList:
                 self.htmlFile.write(html)
         if stdout == 0:
             if usePlugin:
-                print ikogPlugin.modifyOutput(html),
+                print(ikogPlugin.modifyOutput(html)),
             else:
-                print html,
+                print(html),
         else:
             if usePlugin:
-                print ikogPlugin.modifyOutput(stdout),
+                print(ikogPlugin.modifyOutput(stdout)),
             else:
-                print stdout,
+                print(stdout),
 
     def startHtml(self, title):
         htmlFilename = self.filename + ".html"
@@ -2346,7 +2346,7 @@ class TodoList:
             if usePlugin:
                 self.htmlFile.write(ikogPlugin.postHtmlHeader())
         except Exception:
-            print "Failed to create output file:", htmlFilename
+            print("Failed to create output file:", htmlFilename)
             self.htmlFile = ""
 
     def endHtml(self):
@@ -2367,9 +2367,9 @@ class TodoList:
                 self.htmlFile.write("</body>\n</html>\n")
             self.htmlFile.close()
             self.htmlFile = ""
-            print "HTML file " + name + " created."
+            print("HTML file " + name + " created.")
             success = True
-        except Exception, e:
+        except Exception as e:
             self.showError("Error writing to file. " + str(e))
 
         if success:
@@ -2377,7 +2377,7 @@ class TodoList:
                 safeName = os.path.abspath(name).replace("\\","/")
                 safeName = "file://" + urllib.quote(safeName," /:")
                 webbrowser.open(safeName)
-            except Exception, e:
+            except Exception as e:
                 self.showError("Unable to launch html output. " + str(e))
 
 class Abbreviations:
@@ -2638,10 +2638,10 @@ class  TodoItem:
 
         if len(self.actions) == 0:
             self.actions.append("@Anywhere")
-	    self.autoAction = True
+        self.autoAction = True
         if len(self.projects) == 0:
             self.projects.append("None")
-	    self.autoProject = True
+        self.autoProject = True
 
     def addError(self, err):
         if len(self.error) > 0:
@@ -2859,16 +2859,16 @@ class  TodoItem:
 if __name__ == '__main__':
     ### Entry point
     for line in notice:
-        print line
+        print(line)
 
     pythonVer = platform.python_version()
     ver = pythonVer.split(".")
     if int(ver[0]) < gReqPythonMajor or (int(ver[0]) == gReqPythonMajor and int(ver[1]) < gReqPythonMinor):
-        print "\nSorry but this program requires Python ", \
+        print("\nSorry but this program requires Python ", \
         str(gReqPythonMajor) + "." + str(gReqPythonMinor), \
         "\nYour current version is ", \
         str(ver[0]) + "." + str(ver[1]), \
-        "\nTo run the program you will need to install the current version of Python."
+        "\nTo run the program you will need to install the current version of Python.")
     else:
         import webbrowser
         # signal.signal(signal.SIGINT, signalHandler)
@@ -2896,9 +2896,9 @@ if __name__ == '__main__':
             ruler = ikogPlugin.getRuler()
             divider = ikogPlugin.getDivider()
         while reopen != "":
-            print commandList
+            print(commandList)
             todoList = TodoList(sys.argv[0], reopen)
             reopen = todoList.run(commandList)
             commandList = []
-    print "Goodbye"
+    print("Goodbye")
 
